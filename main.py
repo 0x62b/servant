@@ -1,7 +1,7 @@
 import os
 from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
-from flask import Flask, request
+from flask import Flask, jsonify, request
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -40,6 +40,19 @@ handler = SlackRequestHandler(app)
 @flask.route("/slackbot/events", methods=["POST"])
 def slack_events():
     return handler.handle(request)
+
+@flask.route("/commands/test", methods=["POST"])
+def cmd_test():
+    data = request.form
+    user_id = data.get('user_id')
+    channel_id = data.get('channel_id')
+
+    response = {
+        "response_type": "ephemeral",
+        "text": f"User ID: {user_id}\nChannel ID: {channel_id}"
+    }
+    
+    return jsonify(response)
 
 if __name__ == "__main__":
     flask.run(host="0.0.0.0", port=3001)
