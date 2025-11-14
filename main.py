@@ -69,17 +69,18 @@ def cmd_reminder():
         return jsonify(res)
 
     channel_id = data.get('channel_id')
-    text = data.get('text', '').split()
+    text = data.get('text', '')
+    split = text.split()
 
-    if len(text) != 2:
+    if len(split) <= 2:
         res = {
             "response_type": "ephemeral",
-            "text": "noooo u need two argument"
+            "text": "noooo u need at least two argument"
         }
         return jsonify(res)
     
-    reminder = text[0]
-    minutes = text[1]
+    minutes = split[-1]
+    reminder = text.removesuffix(minutes)
     
     try:
         minutes = int(minutes)
