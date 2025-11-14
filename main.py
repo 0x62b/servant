@@ -27,6 +27,13 @@ def handle_join_channel(event, say):
         text=f"<@{user}> welcome to my shithole i mean channel. <@U092839T3A7> get ur ass over here."
     )
 
+@app.event("member_left_channel")
+def handle_left_channel(event, say):
+    user = event["user"]
+    say(
+        text=f"what happened to <@{user}>"
+    )
+
 flask = Flask(__name__)
 handler = SlackRequestHandler(app)
 
