@@ -72,7 +72,7 @@ def cmd_reminder():
     text = data.get('text', '')
     split = text.split()
 
-    if len(split) <= 2:
+    if len(split) < 2:
         res = {
             "response_type": "ephemeral",
             "text": "noooo u need at least two argument"
