@@ -42,7 +42,7 @@ def handle_mention(event, say):
 def handle_join_channel(event, say):
     user = event["user"]
     say(
-        text=f"<@{user}> welcome to my shithole i mean channel. <@U092839T3A7> get ur ass over here."
+        text=f"<@{user}> welcome to my ~shithole~ channel. <@U092839T3A7> get ur ass over here."
     )
 
 flask = Flask(__name__)
