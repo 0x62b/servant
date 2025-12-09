@@ -5,7 +5,7 @@ from flask import Flask, request
 from dotenv import load_dotenv
 from random import randint
 
-from commands import reminder, test, dice
+from commands import reminder, test, dice, sleep
 
 load_dotenv()
 
@@ -73,6 +73,11 @@ def cmd_reminder():
 def cmd_dice():
     data = request.form
     return dice.dice(data)
+
+@flask.route("/commands/sleep", methods=["POST"])
+def cmd_sleep():
+    data = request.form
+    return sleep.sleep(data, app)
     
 if __name__ == "__main__":
     flask.run(host="0.0.0.0", port=3001)
