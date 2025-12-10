@@ -1,30 +1,32 @@
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 from flask import jsonify
 
 def sleep(data, app):
     user_id = data.get('user_id')
 
     if user_id != "U092839T3A7":
-        res = {
-            "response_type": "ephemeral",
-            "text": "no perms"
-        }
-
-        return jsonify(res)
+        return jsonify({"response_type": "ephemeral", "text": "no perms"})
 
     channel_id = data.get('channel_id')
-    
-    tomorrow = (datetime.now(timezone.utc) + timedelta(days=1)).date()
-    target = datetime(tomorrow.year, tomorrow.month, tomorrow.day, 6, 45, tzinfo=timezone.utc)
-    
+
+    tz = ZoneInfo("Australia/Sydney")
+
+    local_now = datetime.now(tz)
+    tomorrow = (local_now + timedelta(days=1)).date()
+    target_local = datetime(tomorrow.year, tomorrow.month, tomorrow.day, 6, 45, tzinfo=tz)
+
+    post_at = int(target_local.astimezone(timezone.utc).timestamp())
+
     app.client.chat_scheduleMessage(
         channel=channel_id,
-        post_at=int(target.timestamp()),
+        post_at=post_at,
         text=f"<@U092839T3A7> wakey wakey"
     )
-        
-    res = {
-        "response_type": "ephemeral",
-        "text": f"you shall wake at 6:45am"
-    }
-    return jsonify(res)
+
+    app.client.chat_postMessage(
+        channel=channel_id,
+        text=f"<@U092839T3A7> finally slept. took him long enough"
+    )
+
+    return jsonify({"response_type": "ephemeral", "text": "you shall wake at 6:45am"})
